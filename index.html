@@ -1,0 +1,142 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Liar Battleship</title>
+    
+  </head>
+  <body>
+  <div id='select-check'>
+    <button class='choose-check-item' id='check-adjacent-hit' style='display:inline-block'>
+      check hit
+    </button>
+    <button class='choose-check-item' id='check-radar' style='display:inline-block'>
+      check radar
+    </button>
+  </div>
+  <div id='check-ajacent-hit-block' style='display:none'>
+    <div>
+      <label>Please select hit or miss</label>
+    </div>
+    <div>
+      <label id='current-hit-status'>?</label>
+    </div>
+  
+    <span>
+      <button id='hit' style='display:inline-block'>hit</button>
+      <button id='miss' style='display:inline-block'>miss</button>
+    </span>
+  
+  </div>
+  <div id='check-radar-block' style='display:none'>
+    <div>
+      <label>Please select radar value</label>
+    </div>
+    <div>
+      <label id='current-radar-value'>?</label>
+    </div>
+    <div>
+      <button value='7' class='input-radar-value' style='display:inline-block'>7</button>
+      <button value='8' class='input-radar-value' style='display:inline-block'>8</button>
+      <button value='9' class='input-radar-value' style='display:inline-block'>9</button>
+    </div>
+    <div>
+      <button value='4' class='input-radar-value' style='display:inline-block'>4</button>
+      <button value='5' class='input-radar-value' style='display:inline-block'>5</button>
+      <button value='6' class='input-radar-value' style='display:inline-block'>6</button>
+    </div>
+    <div>
+      <button value='1' class='input-radar-value' style='display:inline-block'>1</button>
+      <button value='2' class='input-radar-value' style='display:inline-block'>2</button>
+      <button value='3' class='input-radar-value' style='display:inline-block'>3</button>
+    </div>
+    <div>
+      <button value='0' class='input-radar-value' style='display:inline-block'>0</button>
+      <button id='clear-current-radar-value' style='display:inline-block'>C</button>
+    </div>
+  </div>
+  <div id='next-block' style='display:none'>
+    <button id='next-player' style='display:block'>next player</button>
+    <button id='all-done' style='display:block'>all done</button>
+  </div>
+  <div id="result-block" style="display:none">
+  
+  </div>
+
+  <script>
+    $(function(){
+      var currentRadarValue;
+      var totalRadarValue;
+      var allHitStatus;
+      var currentHitStatus;
+      var currentCheckType = null;
+      $("#check-radar").on("click", function() {
+        $("#check-radar-block").show();
+        $("#check-ajacent-hit-block").hide();
+        totalRadarValue = 0;
+        currentCheckType = "radar";
+        clearRadarInput();
+      })
+      $("#check-adjacent-hit").on("click", function() {
+        $("#check-ajacent-hit-block").show();
+        $("#check-radar-block").hide();
+        currentCheckType = "hit";
+        clearHitInput();
+      })
+      
+      var clearRadarInput = function() {
+        currentRadarValue = 0;
+        $("#current-radar-value").text("?");
+        $("#next-block").hide();
+      }
+      
+      var clearHitInput = function() {
+        currentHitStatus = null;
+        $("#current-hit-status").text("?");
+        $("#next-block").hide();
+      }
+      
+      $("#hit").on("click", function() {
+        currentHitStatus = 1;
+        $("#current-hit-status").text("Hit!");
+        $("#next-block").show();
+      })
+      $("#miss").on("click", function() {
+        currentHitStatus = 0;
+        $("#current-hit-status").text("Miss!");
+        $("#next-block").show();
+      })
+      
+      $(".input-radar-value").on("click", function() {
+        var value = parseInt($(this).attr("value"));
+        if (currentRadarValue === 0) {
+          currentRadarValue = value;
+        } else {
+          currentRadarValue = currentRadarValue * 10 + value;
+        }
+        $("#current-radar-value").text(currentRadarValue);
+        $("#next-block").show();
+      })
+      
+      $("#clear-current-radar-value").on("click", function() {
+        clearRadarInput();
+      })
+      $("#all-done").on("click", function() {
+        if (currentCheckType == "radar") {
+      
+        } else if (currentCheckType == "hit") {
+      
+        }
+      })
+      $("#next-player").on("click", function() {
+        if (currentCheckType == "radar") {
+          totalRadarValue += currentRadarValue;
+      
+        } else if (currentCheckType == "hit") {
+      
+        }
+      })
+    });
+  </script>
+  </body>
+</html>
