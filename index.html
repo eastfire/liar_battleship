@@ -3,37 +3,87 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Liar Battleship</title>
-    
+    <style>
+        body {
+            bottom: 0;
+            left: 0;
+            margin: 0;
+            padding: 10px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        .choose-check-item {
+            width:48%;
+        }
+        .choose-check-item img {
+            width: 100%;
+        }
+        .status-label {
+            text-align: center;
+            width:100%;
+            font-size: 28px;
+            display: block;
+        }
+        .choose-hit-item {
+            width: 48%;
+            font-size:45px;
+        }
+        #hit, .result-hit {
+            color:red;
+        }
+        #next-block, #result-checked {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
+        .next-button {
+            height: 40px;
+            width: 100%;
+        }
+        .input-radar-value, #clear-current-radar-value {
+            font-size: 30px;
+            height: 50px;
+            width: 32%;
+            margin: 3px 0;
+        }
+        .input-radar-value.zero {
+            width: 65.5%;
+        }
+    </style>
   </head>
   <body>
-  <div id='select-check'>
+  <div id='select-check-block'>
     <button class='choose-check-item' id='check-adjacent-hit' style='display:inline-block'>
-      check hit
+      <img src="img/boom.png">
     </button>
     <button class='choose-check-item' id='check-radar' style='display:inline-block'>
-      check radar
+        <img src="img/radar.png">
     </button>
   </div>
-  <div id='check-ajacent-hit-block' style='display:none'>
+  <div id='check-adjacent-hit-block' style='display:none'>
     <div>
-      <label>Please select hit or miss</label>
+      <label class="status-label player-number"></label>
+      <label class="status-label">请输入Hit或Miss</label>
     </div>
     <div>
-      <label id='current-hit-status'>?</label>
+      <label id='current-hit-status' class="status-label">?</label>
     </div>
   
     <span>
-      <button id='hit' style='display:inline-block'>hit</button>
-      <button id='miss' style='display:inline-block'>miss</button>
+      <button id='hit' class="choose-hit-item" style='display:inline-block'>Hit!</button>
+      <button id='miss' class="choose-hit-item" style='display:inline-block'>Miss!</button>
     </span>
   
   </div>
   <div id='check-radar-block' style='display:none'>
     <div>
-      <label>Please select radar value</label>
+      <label class="status-label player-number"></label>
+      <label class="status-label">请输入雷达扫描结果</label>
     </div>
     <div>
-      <label id='current-radar-value'>?</label>
+      <label id='current-radar-value' class="status-label">?</label>
     </div>
     <div>
       <button value='7' class='input-radar-value' style='display:inline-block'>7</button>
@@ -51,36 +101,50 @@
       <button value='3' class='input-radar-value' style='display:inline-block'>3</button>
     </div>
     <div>
-      <button value='0' class='input-radar-value' style='display:inline-block'>0</button>
+      <button value='0' class='input-radar-value zero' style='display:inline-block'>0</button>
       <button id='clear-current-radar-value' style='display:inline-block'>C</button>
     </div>
   </div>
   <div id='next-block' style='display:none'>
-    <button id='next-player' style='display:block'>next player</button>
-    <button id='all-done' style='display:block'>all done</button>
+    <button id='next-player' class="next-button" style='display:block'>下一位玩家</button>
+    <button id='all-done' class="next-button" style='display:block'>全部输入完毕</button>
   </div>
   <div id="result-block" style="display:none">
-  
+      <div>
+          <label class="status-label" id="result-label"></label>
+      </div>
+      <button id='result-checked' class="next-button" style='display:block'>确定</button>
   </div>
-
+  <script src="libs/jquery-3.1.0.min.js"></script>
   <script>
     $(function(){
       var currentRadarValue;
       var totalRadarValue;
-      var allHitStatus;
+      var allHitStatus = false;
       var currentHitStatus;
       var currentCheckType = null;
+      var currentPlayerNumber = 1;
+      var renderPlayerNumber = function(){
+        $(".player-number").text("第"+currentPlayerNumber+"位玩家")
+      }
       $("#check-radar").on("click", function() {
+        $("#select-check-block").hide();
         $("#check-radar-block").show();
-        $("#check-ajacent-hit-block").hide();
-        totalRadarValue = 0;
+        $("#check-adjacent-hit-block").hide();
         currentCheckType = "radar";
+        totalRadarValue = 0;
+        currentPlayerNumber = 1;
+        renderPlayerNumber();
         clearRadarInput();
       })
       $("#check-adjacent-hit").on("click", function() {
-        $("#check-ajacent-hit-block").show();
+        $("#select-check-block").hide();
+        $("#check-adjacent-hit-block").show();
         $("#check-radar-block").hide();
         currentCheckType = "hit";
+        currentPlayerNumber = 1;
+        allHitStatus = false;
+        renderPlayerNumber();
         clearHitInput();
       })
       
@@ -91,18 +155,18 @@
       }
       
       var clearHitInput = function() {
-        currentHitStatus = null;
+        currentHitStatus = false;
         $("#current-hit-status").text("?");
         $("#next-block").hide();
       }
       
       $("#hit").on("click", function() {
-        currentHitStatus = 1;
+        currentHitStatus = true;
         $("#current-hit-status").text("Hit!");
         $("#next-block").show();
       })
       $("#miss").on("click", function() {
-        currentHitStatus = 0;
+        currentHitStatus = false;
         $("#current-hit-status").text("Miss!");
         $("#next-block").show();
       })
@@ -123,18 +187,38 @@
       })
       $("#all-done").on("click", function() {
         if (currentCheckType == "radar") {
-      
+          totalRadarValue += currentRadarValue;
+          $("#result-label").text("扫描到"+totalRadarValue+"点生命").removeClass("result-miss result-hit");
         } else if (currentCheckType == "hit") {
-      
+          allHitStatus = allHitStatus || currentHitStatus;
+          if ( allHitStatus ) {
+              $("#result-label").text("Hit!!").addClass("result-hit").removeClass("result-miss");
+          } else {
+              $("#result-label").text("Miss!!").addClass("result-miss").removeClass("result-hit");
+          }
         }
+        $("#select-check-block").hide();
+        $("#check-adjacent-hit-block").hide();
+        $("#check-radar-block").hide();
+        $("#next-block").hide();
+        $("#result-block").show();
       })
       $("#next-player").on("click", function() {
         if (currentCheckType == "radar") {
           totalRadarValue += currentRadarValue;
-      
+          currentPlayerNumber++;
+          renderPlayerNumber();
+          clearRadarInput();
         } else if (currentCheckType == "hit") {
-      
+          allHitStatus = allHitStatus || currentHitStatus;
+          currentPlayerNumber++;
+          renderPlayerNumber();
+          clearHitInput();
         }
+      })
+      $("#result-checked").on("click",function(){
+        $("#select-check-block").show();
+        $("#result-block").hide();
       })
     });
   </script>
