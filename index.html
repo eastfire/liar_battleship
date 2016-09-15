@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Liar Battleship</title>
+    <link href="css/bootstrap.min.css" rel='stylesheet'/>
     <style>
         body {
             bottom: 0;
@@ -41,6 +42,7 @@
         .next-button {
             height: 40px;
             width: 100%;
+            margin: 10px 0;
         }
         .input-radar-value, #clear-current-radar-value {
             font-size: 30px;
@@ -55,11 +57,11 @@
   </head>
   <body>
   <div id='select-check-block'>
-    <button class='choose-check-item' id='check-adjacent-hit' style='display:inline-block'>
+    <button class='btn btn-default choose-check-item' id='check-adjacent-hit' style='display:inline-block'>
       <img src="img/boom.png"/>
       <label class="status-label">周边攻击</label>
     </button>
-    <button class='choose-check-item' id='check-radar' style='display:inline-block'>
+    <button class='btn btn-default choose-check-item' id='check-radar' style='display:inline-block'>
       <img src="img/radar.png"/>
       <label class="status-label">雷达扫描</label>
     </button>
@@ -74,8 +76,8 @@
     </div>
   
     <span>
-      <button id='hit' class="choose-hit-item" style='display:inline-block'>Hit!</button>
-      <button id='miss' class="choose-hit-item" style='display:inline-block'>Miss!</button>
+      <button id='hit' class="btn btn-default choose-hit-item" style='display:inline-block'>Hit!</button>
+      <button id='miss' class="btn btn-default choose-hit-item" style='display:inline-block'>Miss!</button>
     </span>
   
   </div>
@@ -88,34 +90,34 @@
       <label id='current-radar-value' class="status-label">?</label>
     </div>
     <div>
-      <button value='7' class='input-radar-value' style='display:inline-block'>7</button>
-      <button value='8' class='input-radar-value' style='display:inline-block'>8</button>
-      <button value='9' class='input-radar-value' style='display:inline-block'>9</button>
+      <button value='7' class='btn btn-default input-radar-value' style='display:inline-block'>7</button>
+      <button value='8' class='btn btn-default input-radar-value' style='display:inline-block'>8</button>
+      <button value='9' class='btn btn-default input-radar-value' style='display:inline-block'>9</button>
     </div>
     <div>
-      <button value='4' class='input-radar-value' style='display:inline-block'>4</button>
-      <button value='5' class='input-radar-value' style='display:inline-block'>5</button>
-      <button value='6' class='input-radar-value' style='display:inline-block'>6</button>
+      <button value='4' class='btn btn-default input-radar-value' style='display:inline-block'>4</button>
+      <button value='5' class='btn btn-default input-radar-value' style='display:inline-block'>5</button>
+      <button value='6' class='btn btn-default input-radar-value' style='display:inline-block'>6</button>
     </div>
     <div>
-      <button value='1' class='input-radar-value' style='display:inline-block'>1</button>
-      <button value='2' class='input-radar-value' style='display:inline-block'>2</button>
-      <button value='3' class='input-radar-value' style='display:inline-block'>3</button>
+      <button value='1' class='btn btn-default input-radar-value' style='display:inline-block'>1</button>
+      <button value='2' class='btn btn-default input-radar-value' style='display:inline-block'>2</button>
+      <button value='3' class='btn btn-default input-radar-value' style='display:inline-block'>3</button>
     </div>
     <div>
-      <button value='0' class='input-radar-value zero' style='display:inline-block'>0</button>
-      <button id='clear-current-radar-value' style='display:inline-block'>C</button>
+      <button value='0' class='btn btn-default input-radar-value zero' style='display:inline-block'>0</button>
+      <button id='clear-current-radar-value' class="btn btn-default" style='display:inline-block'>C</button>
     </div>
   </div>
   <div id='next-block' style='display:none'>
-    <button id='next-player' class="next-button" style='display:block'>下一位玩家</button>
-    <button id='all-done' class="next-button" style='display:block'>全部输入完毕</button>
+    <button id='next-player' class="btn btn-primary next-button" style='display:block'>下一位玩家</button>
+    <button id='all-done' class="btn btn-danger next-button" style='display:block'>全部输入完毕</button>
   </div>
   <div id="result-block" style="display:none">
       <div>
           <label class="status-label" id="result-label"></label>
       </div>
-      <button id='result-checked' class="next-button" style='display:block'>确定</button>
+      <button id='result-checked' class="btn btn-success next-button" style='display:block'>确定</button>
   </div>
   <script src="libs/jquery-3.1.0.min.js"></script>
   <script>
